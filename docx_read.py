@@ -11,11 +11,11 @@ import csv
 import re
 
 ### File loading ###
-path_dir = '/Users/chanhee.kang/Desktop/sa_paser/test2.docx' #한국
+path_dir = '*.docx' #한국
 file_list = natsorted(glob.glob(path_dir)) #natural sorted
 publisher = None
 
-mwp_df = pd.read_csv(r"/Users/chanhee.kang/Desktop/sa_paser/test.csv")
+mwp_df = pd.read_csv("*.csv")
 
 curr_number = 0
 country_list = []
@@ -25,15 +25,15 @@ docu_body_graphic_re = re.compile(r'(?<=Body\n\n\n\n\n\n)((.|\n)*)(?=Graphic)')
 docu_body_load_date_re =re.compile(r'(?<=Body\n\n\n\n\n\n)((.|\n)*)(?=Load Date:)')
 docu_classification = re.compile(r'(?<=Classification\n\n\n\n\n\n)((.|\n)*)(?=)')
 docu_date = re.compile(r'((((((((Jan(uary)?)|(Mar(ch)?)|(May)|(July?)|(Aug(ust)?)|(Oct(ober)?)|(Dec(ember)?)) ((3[01])|29))|(((Apr(il)?)|(June?)|(Sep(tember)?)|(Nov(ember)?)) ((30)|(29)))|(((Jan(uary)?)|(Feb(ruary)?|(Mar(ch)?)|(Apr(il)?)|(May)|(June?)|(July?)|(Aug(ust)?)|(Sep(tember)?)|(Oct(ober)?)|(Nov(ember)?)|(Dec(ember)?))) (2[0-8]|(1\d)|(0?[1-9])))),? )|(((((1[02])|(0?[13578]))[\.\-/]((3[01])|29))|(((11)|(0?[469]))[\.\-/]((30)|(29)))|(((1[0-2])|(0?[1-9]))[\.\-/](2[0-8]|(1\d)|(0?[1-9]))))[\.\-/])|(((((3[01])|29)[ \-\./]((Jan(uary)?)|(Mar(ch)?)|(May)|(July?)|(Aug(ust)?)|(Oct(ober)?)|(Dec(ember)?)))|(((30)|(29))[ \.\-/]((Apr(il)?)|(June?)|(Sep(tember)?)|(Nov(ember)?)))|((2[0-8]|(1\d)|(0?[1-9]))[ \.\-/]((Jan(uary)?)|(Feb(ruary)?|(Mar(ch)?)|(Apr(il)?)|(May)|(June?)|(July?)|(Aug(ust)?)|(Sep(tember)?)|(Oct(ober)?)|(Nov(ember)?)|(Dec(ember)?)))))[ \-\./])|((((3[01])|29)((Jan)|(Mar)|(May)|(Jul)|(Aug)|(Oct)|(Dec)))|(((30)|(29))((Apr)|(Jun)|(Sep)|(Nov)))|((2[0-8]|(1\d)|(0[1-9]))((Jan)|(Feb)|(Mar)|(Apr)|(May)|(Jun)|(Jul)|(Aug)|(Sep)|(Oct)|(Nov)|(Dec)))))(((175[3-9])|(17[6-9]\d)|(1[89]\d{2})|[2-9]\d{3})|\d{2}))|((((175[3-9])|(17[6-9]\d)|(1[89]\d{2})|[2-9]\d{3})|\d{2})((((1[02])|(0[13578]))((3[01])|29))|(((11)|(0[469]))((30)|(29)))|(((1[0-2])|(0[1-9]))(2[0-8]|(1\d)|(0[1-9])))))|(((29Feb)|(29[ \.\-/]Feb(ruary)?[ \.\-/])|(Feb(ruary)? 29,? ?)|(0?2[\.\-/]29[\.\-/]))((((([2468][048])|([3579][26]))00)|(17((56)|([68][048])|([79][26])))|(((1[89])|([2-9]\d))(([2468][048])|([13579][26])|(0[48]))))|(([02468][048])|([13579][26]))))|(((((([2468][048])|([3579][26]))00)|(17((56)|([68][048])|([79][26])))|(((1[89])|([2-9]\d))(([2468][048])|([13579][26])|(0[48]))))|(([02468][048])|([13579][26])))(0229)))')
-Master = pd.DataFrame(columns=['Publisher', 'Country', 'Title', 'Date', 'Body'])  # 빈 데이터프레임 만들기
+Master = pd.DataFrame(columns=['Publisher', 'Country', 'Title', 'Date', 'Body'])
 idx = 0
 
-##For loop, 지정한 파일 리스트에서 추출
+
 for file in tqdm(file_list):
     #print(file)
     doc = docxpy.DOCReader(file)
     doc.process()
-    doc.data['document'] = re.sub(r'[\?\.\|\*\[\]\$\+\-]',' ',doc.data['document'])  #물음표, 마침표 등 정규식과 겹치는 것 삭제해야함(괄호 제외)
+    doc.data['document'] = re.sub(r'[\?\.\|\*\[\]\$\+\-]',' ',doc.data['document'])
     target_str = doc.data['document']
     max = 0
 
@@ -113,5 +113,5 @@ for file in tqdm(file_list):
             publisher = None
             continue
 
-        Master.to_excel(r"/Users/chanhee.kang/Desktop/sa_paser/test.xlsx", index=None)
+        Master.to_excel("test.xlsx", index=None)
         idx += 1
